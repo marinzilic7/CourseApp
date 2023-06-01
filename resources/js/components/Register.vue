@@ -165,7 +165,7 @@ export default {
     justify-content: center;
     align-items: center;
     height: 700px;
-    margin-top:50px;
+    margin-top:30px;
 }
 form {
     background-color: #f7f7f7;
