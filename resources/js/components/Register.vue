@@ -76,7 +76,7 @@
             <button type="submit" class="btn btn-primary">Register</button>
             <div class="notiDIV" v-if="successReg">
                 <div class="alert alert-success" role="alert">
-                    {{ poruka }}
+                    {{ poruka }} <a href="/login">Log in</a>
                 </div>
             </div>
         </form>

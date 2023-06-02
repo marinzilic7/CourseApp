@@ -1,8 +1,8 @@
 <template>
     <div class="container">
         <form @submit.prevent="logUser" method="POST">
-            <input type="hidden" v-model="this.POST" />
-            <input type="hidden" v-model="this.csrfToken" />
+            <input type="hidden" :value="this.POST" />
+            <input type="hidden" :value="this.csrfToken" />
             <div class="form-group">
                 <label for="exampleInputEmail1">Email address</label>
                 <input
@@ -95,12 +95,14 @@ export default {
                     if(this.poruka == 'Uspješna prijava'){
                         this.successReg = true
                         this.falseReg = false
+                       /*  this.$router.push({ path: '/', query: { poruka: this.poruka } }); */
+                        this.$router.push('/')
                     }else{
                         this.falseReg = true
                         this.successReg = false
                     }
 
-                   /*  router.push('/') */
+
                     this.form = {
                         email: "",
                         password: "",
