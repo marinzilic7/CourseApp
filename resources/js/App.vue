@@ -29,18 +29,17 @@ import { RouterLink, RouterView } from "vue-router";
                             >About</RouterLink
                         >
                     </li>
-                    <li v-if="!isLoggedIn" class="nav-item">
+                    <li v-if="!isLogged" class="nav-item">
                         <RouterLink class="nav-link text-light" to="/register"
                             >Register</RouterLink
                         >
                     </li>
-                    <li v-if="!isLoggedIn" class="nav-item">
+                    <li v-if="!isLogged" class="nav-item">
                         <RouterLink class="nav-link text-light" to="/login"
                             >Login</RouterLink
                         >
                     </li>
-
-                    <div v-if="isLoggedIn" class="dropdown">
+                    <div v-if="isLogged" class="dropdown">
                         <button
                             class="btn btn-secondary dropdown-toggle"
                             type="button"
@@ -52,11 +51,11 @@ import { RouterLink, RouterView } from "vue-router";
                         <ul class="dropdown-menu">
                             <li>
                                 <button
-                                    @click="logout"
+                                    @click="odjaviSe"
                                     class="dropdown-item"
                                     type="button"
                                 >
-                                Logout
+                                    Logout
                                 </button>
                             </li>
                         </ul>
@@ -77,12 +76,14 @@ import { RouterLink, RouterView } from "vue-router";
             </div>
         </div>
     </nav>
-
+    <div>
+        <p>Is Logged {{ isLogged }}</p>
+    </div>
     <RouterView />
 </template>
 <script>
+import router from "./router";
 import axios from "axios";
-
 export default {
     data() {
         return {
@@ -90,10 +91,14 @@ export default {
             loggedInUser: "",
         };
     },
+    computed: {
+        isLogged() {
+            return this.$store.getters.getIsLogged; // Dohvaćamo varijablu putem getters-a
+        },
+    },
     mounted() {
         this.checkLoginStatus();
     },
-
     methods: {
         checkLoginStatus() {
             axios
@@ -107,12 +112,13 @@ export default {
                     console.log(error);
                 });
         },
-        logout() {
+        odjaviSe() {
             axios
                 .post("/logout")
                 .then((response) => {
                     this.isLoggedIn = false;
-                    this.$router.push("/");
+                    this.$store.dispatch("logout", false);
+                    this.$router.push("/login");
                 })
                 .catch((error) => {
                     console.log(error);
@@ -121,8 +127,5 @@ export default {
     },
 };
 </script>
-<style>
-nav a {
-    margin-left: 30px;
-}
-</style>
+
+<style></style>

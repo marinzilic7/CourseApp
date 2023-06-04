@@ -1,3 +1,4 @@
+
 <template>
     <div class="container">
         <form @submit.prevent="logUser" method="POST">
@@ -82,6 +83,7 @@ export default {
                 });
         },
         logUser() {
+
             const Data = {
                 email: this.form.email,
                 password: this.form.password,
@@ -90,13 +92,16 @@ export default {
             axios
                 .post("/logUser", Data)
                 .then((response) => {
+                    const logiran = true
+                    this.$emit('variableChanged', logiran);
                     this.poruka = response.data.poruka;
                     this.successReg = true;
                     if(this.poruka == 'Uspješna prijava'){
                         this.successReg = true
                         this.falseReg = false
-                       /*  this.$router.push({ path: '/', query: { poruka: this.poruka } }); */
-                        this.$router.push('/')
+                        this.$store.dispatch('login', true);
+                        /*  this.$router.push({ path: '/', query: { poruka: this.poruka } }); */
+                         this.$router.push('/')
                     }else{
                         this.falseReg = true
                         this.successReg = false

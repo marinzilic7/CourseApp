@@ -68,17 +68,15 @@ class UserController extends Controller
             return response()->json(['poruka' => 'Neuspješna prijava']);
         }
     }
-
-    public function isLogged()
+   public function isLogged()
     {
 
         $user = Auth::user();
-        return response()->json($user);
-       /*  if (Auth::check()) {
-            return response()->json(['isLoggedIn' => true]);
+        if ($user) {
+            return response()->json($user);
         } else {
-            return response()->json(['isLoggedIn' => false]);
-        } */
+            return response()->json(null);
+        }
     }
 
     public function logout()
