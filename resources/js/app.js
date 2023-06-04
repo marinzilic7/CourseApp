@@ -34,6 +34,12 @@ const store = createStore({
             commit('setIsLogged', false);
             commit('setPorukaLog', ''); // Resetiranje poruke kod odjave
         },
+        setPoruka({ commit }, poruka) {
+            commit('setPorukaLog', poruka);
+            setTimeout(() => {
+                commit('setPorukaLog', ''); // Resetiranje poruke nakon 5 sekundi
+            }, 5000);
+        },
     },
     getters: {
         getIsLogged(state) {

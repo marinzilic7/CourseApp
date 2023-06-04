@@ -1,9 +1,6 @@
 <template>
     <div>
-        <!-- Ostatak HTML koda za home komponentu -->
-       <!--  <div v-if="poruka" class="alert alert-success" role="alert">
-            {{ poruka }}
-        </div> -->
+
     </div>
 </template>
 
