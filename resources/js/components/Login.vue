@@ -100,6 +100,7 @@ export default {
                         this.successReg = true
                         this.falseReg = false
                         this.$store.dispatch('login', true);
+                        this.$store.dispatch('setPoruka', 'Uspjesna prijava!');
                         /*  this.$router.push({ path: '/', query: { poruka: this.poruka } }); */
                          this.$router.push('/')
                     }else{

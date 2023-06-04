@@ -41,7 +41,7 @@ import { RouterLink, RouterView } from "vue-router";
                     </li>
                     <div v-if="isLogged" class="dropdown">
                         <button
-                            class="btn btn-secondary dropdown-toggle"
+                            class="btn btn-primary dropdown-toggle"
                             type="button"
                             data-bs-toggle="dropdown"
                             aria-expanded="false"
@@ -78,7 +78,13 @@ import { RouterLink, RouterView } from "vue-router";
     </nav>
     <div>
         <p>Is Logged {{ isLogged }}</p>
+
+            <div v-if="isLogged && porukaLog" class="alert alert-success" role="alert">
+                {{ porukaLog }}
+            </div>
+
     </div>
+
     <RouterView />
 </template>
 <script>
@@ -89,11 +95,15 @@ export default {
         return {
             isLoggedIn: false,
             loggedInUser: "",
+
         };
     },
     computed: {
         isLogged() {
             return this.$store.getters.getIsLogged; // Dohvaćamo varijablu putem getters-a
+        },
+        porukaLog() {
+            return this.$store.getters.getPorukaLog;
         },
     },
     mounted() {
@@ -128,4 +138,10 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.alert.alert-success {
+    width: 10%;
+    float: right;
+    margin-right: 30px;
+}
+</style>

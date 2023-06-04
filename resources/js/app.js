@@ -6,30 +6,43 @@ import router from './router';
 import App from './App.vue';
 
 const store = createStore({
-  state() {
-    return {
-      isLogged: localStorage.getItem('isLogged') === 'true',
-    };
-  },
-  mutations: {
-    setIsLogged(state, value) {
-      state.isLogged = value;
-      localStorage.setItem('isLogged', value.toString());
+    state() {
+        return {
+            isLogged: localStorage.getItem('isLogged') === 'true',
+            porukaLog: localStorage.getItem('porukaLogiran') || ''
+        };
     },
-  },
-  actions: {
-    login({ commit }) {
-      commit('setIsLogged', true);
+    mutations: {
+        setIsLogged(state, value) {
+            state.isLogged = value;
+            localStorage.setItem('isLogged', value.toString());
+        },
+        setPorukaLog(state, value) {
+            state.porukaLog = value;
+            localStorage.setItem('porukaLogiran', value); // Ispravljen ključ u lokalnom spremištu
+        },
     },
-    logout({ commit }) {
-      commit('setIsLogged', false);
+    actions: {
+        login({ commit }) {
+            commit('setIsLogged', true);
+            commit('setPorukaLog', 'Uspješna prijava!');
+            setTimeout(() => {
+                commit('setPorukaLog', ''); // Resetiranje poruke nakon 5 sekundi
+            }, 1000);// Postavljanje poruke kod prijave
+        },
+        logout({ commit }) {
+            commit('setIsLogged', false);
+            commit('setPorukaLog', ''); // Resetiranje poruke kod odjave
+        },
     },
-  },
-  getters: {
-    getIsLogged(state) {
-      return state.isLogged;
+    getters: {
+        getIsLogged(state) {
+            return state.isLogged;
+        },
+        getPorukaLog(state) {
+            return state.porukaLog;
+        },
     },
-  },
 });
 
 const app = createApp(App);
