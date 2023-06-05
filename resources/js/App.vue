@@ -46,7 +46,7 @@ import { RouterLink, RouterView } from "vue-router";
                         data-bs-target="#exampleModal"
                         data-bs-whatever="@mdo"
                     >
-                        Add Books
+                        Add Course
                     </button>
                     <div
                         class="modal fade"
@@ -62,7 +62,7 @@ import { RouterLink, RouterView } from "vue-router";
                                         class="modal-title fs-5"
                                         id="exampleModalLabel"
                                     >
-                                        New message
+                                        Add Course
                                     </h1>
                                     <button
                                         type="button"
@@ -72,30 +72,89 @@ import { RouterLink, RouterView } from "vue-router";
                                     ></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form>
+                                    <form
+                                        @submit.prevent="addCourse"
+                                        method="POST"
+                                    >
+                                        <input
+                                            type="hidden"
+                                            v-model="this.POST"
+                                        />
+                                        <input
+                                            type="hidden"
+                                            name=""
+                                            v-model="this.csrfToken"
+                                        />
                                         <div class="mb-3">
                                             <label
                                                 for="recipient-name"
                                                 class="col-form-label"
-                                                >Ime:</label
+                                                >Title:</label
                                             >
                                             <input
                                                 type="text"
                                                 class="form-control"
                                                 id="recipient-name"
+                                                v-model="title"
                                             />
                                         </div>
                                         <div class="mb-3">
                                             <label
                                                 for="message-text"
                                                 class="col-form-label"
-                                                >Message:</label
+                                                >Body:</label
                                             >
                                             <textarea
                                                 class="form-control"
                                                 id="message-text"
+                                                v-model="body"
                                             ></textarea>
                                         </div>
+                                        <div class="input-group mb-3">
+                                            <input
+                                                type="file"
+                                                class="form-control"
+                                                id="inputGroupFile02"
+                                                @change="imageChange"
+                                            />
+                                            <label
+                                                class="input-group-text"
+                                                for="inputGroupFile02"
+                                                >Upload</label
+                                            >
+                                        </div>
+
+                                        <div
+                                            class="form-check"
+                                            v-for="category in categories"
+                                            :key="category.id"
+                                        >
+                                            <input
+                                                class="form-check-input"
+                                                type="checkbox"
+                                                :value="category.id"
+                                                :id="
+                                                    'flexCheckDefault_' +
+                                                    category.id
+                                                "
+                                                v-model="selectedCategories"
+                                            />
+                                            <label
+                                                class="form-check-label"
+                                                :for="
+                                                    'flexCheckDefault_' +
+                                                    category.id
+                                                "
+                                            >
+                                                {{ category.name }}
+                                            </label>
+                                        </div>
+                                        <button
+                                            type="submit"
+                                            class="btn btn-primary"
+                                        >
+                                            Add
+                                        </button>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
@@ -105,12 +164,6 @@ import { RouterLink, RouterView } from "vue-router";
                                         data-bs-dismiss="modal"
                                     >
                                         Close
-                                    </button>
-                                    <button
-                                        type="button"
-                                        class="btn btn-primary"
-                                    >
-                                        Send message
                                     </button>
                                 </div>
                             </div>
@@ -175,6 +228,18 @@ export default {
         return {
             isLoggedIn: false,
             loggedInUser: "",
+            formData: {
+                title: "",
+                body: "",
+                image: "",
+                categories: [
+                    // Vaša lista kategorija
+                ],
+                selectedCategories: [],
+            },
+            csrfToken: "",
+            POST: "",
+            categories: [],
         };
     },
     computed: {
@@ -187,8 +252,19 @@ export default {
     },
     mounted() {
         this.checkLoginStatus();
+        this.getCategories();
     },
     methods: {
+        fetchCsrfToken() {
+            axios
+                .get("/sanctum/csrf-cookie")
+                .then((response) => {
+                    this.csrfToken = response.data.csrf_token;
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        },
         checkLoginStatus() {
             axios
                 .get("/isLogged")
@@ -211,6 +287,38 @@ export default {
                 })
                 .catch((error) => {
                     console.log(error);
+                });
+        },
+        getCategories() {
+            axios
+                .get("/categories")
+                .then((response) => {
+                    this.categories = response.data;
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
+
+        addCourse() {
+            const Data = {
+                title: this.formData.title,
+                body: this.formData.body,
+                image: this.formData.image,
+                selectedCategories: this.fromData.selectedCategories
+            };
+            axios.defaults.headers.common["X-CSRF-TOKEN"] = this.csrfToken;
+            axios
+                .post("/addCourse", Data)
+                .then((response) => {
+                    this.poruka = response.data.poruka;
+                })
+                .catch((error) => {
+                    if (error.response && error.response.status === 422) {
+                        this.errors = error.response.data.errors;
+                    } else {
+                        console.log(error);
+                    }
                 });
         },
     },

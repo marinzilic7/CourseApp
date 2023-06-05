@@ -184,6 +184,12 @@ button {
 
 .notiDIV {
     margin-top: 25px;
+    width: 100%;
+}
+.alert.alert-success{
+    width: 100%;
+    position: relative;
+    left:30px;
 }
 
 .input-icon {
