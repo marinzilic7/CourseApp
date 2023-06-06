@@ -13,6 +13,7 @@ Route::post('/logout',[UserController::class,'logout']);
 Route::get('/categories',[CategoryController::class,'getCategory']);
 Route::post('/addCourse',[CourseController::class,'addCourse']);
 Route::get('/getCourse',[CourseController::class,'getCourse']);
+Route::post('/delete/{id}',[CourseController::class,'deleteCourse']);
 
 Route::get('/{any}', function () {
     return view('welcome');

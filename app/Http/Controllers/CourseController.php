@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 class CourseController extends Controller
 {
     public function addCourse(Request $request)
@@ -40,4 +40,16 @@ class CourseController extends Controller
 
         return response()->json($course);
     }
+
+    public function deleteCourse($id){
+        try {
+            $course = Course::findOrFail($id);
+            $course->delete();
+
+            return response()->json(['message' => 'Kurs je uspješno obrisan']);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Kurs nije pronađen'], 404);
+        }
+    }
+
 }
