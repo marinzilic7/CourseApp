@@ -95,7 +95,7 @@ import { RouterLink, RouterView } from "vue-router";
                                                 type="text"
                                                 class="form-control"
                                                 id="recipient-name"
-                                                v-model="title"
+                                                v-model="formData.title"
                                             />
                                         </div>
                                         <div class="mb-3">
@@ -107,7 +107,7 @@ import { RouterLink, RouterView } from "vue-router";
                                             <textarea
                                                 class="form-control"
                                                 id="message-text"
-                                                v-model="body"
+                                                v-model="formData.body"
                                             ></textarea>
                                         </div>
                                         <div class="input-group mb-3">
@@ -123,31 +123,26 @@ import { RouterLink, RouterView } from "vue-router";
                                                 >Upload</label
                                             >
                                         </div>
-
-                                        <div
-                                            class="form-check"
-                                            v-for="category in categories"
-                                            :key="category.id"
-                                        >
-                                            <input
-                                                class="form-check-input"
-                                                type="checkbox"
-                                                :value="category.id"
-                                                :id="
-                                                    'flexCheckDefault_' +
-                                                    category.id
-                                                "
-                                                v-model="selectedCategories"
-                                            />
-                                            <label
-                                                class="form-check-label"
-                                                :for="
-                                                    'flexCheckDefault_' +
-                                                    category.id
-                                                "
+                                        <div>
+                                            <label for="category"
+                                                >Kategorija:</label
                                             >
-                                                {{ category.name }}
-                                            </label>
+                                            <select
+                                                id="category"
+                                                v-model="formData.category_id"
+                                                required
+                                            >
+                                                <option value="">
+                                                    Odaberi kategoriju
+                                                </option>
+                                                <option
+                                                    v-for="category in categories"
+                                                    :value="category.id"
+                                                    :key="category.id"
+                                                >
+                                                    {{ category.name }}
+                                                </option>
+                                            </select>
                                         </div>
                                         <button
                                             type="submit"
@@ -167,6 +162,13 @@ import { RouterLink, RouterView } from "vue-router";
                                     </button>
                                 </div>
                             </div>
+                        </div>
+                        <div
+                            v-if="courseAdd"
+                            class="alert alert-success"
+                            role="alert"
+                        >
+                            {{ message }}
                         </div>
                     </div>
                     <div v-if="isLogged" class="dropdown">
@@ -231,15 +233,14 @@ export default {
             formData: {
                 title: "",
                 body: "",
-                image: "",
-                categories: [
-                    // Vaša lista kategorija
-                ],
-                selectedCategories: [],
+                image: null,
+                category_id: "",
             },
             csrfToken: "",
             POST: "",
             categories: [],
+            message: "",
+            courseAdd: false,
         };
     },
     computed: {
@@ -299,26 +300,26 @@ export default {
                     console.log(error);
                 });
         },
+        imageChange(event) {
+            this.formData.image = event.target.files[0];
+        },
 
         addCourse() {
-            const Data = {
-                title: this.formData.title,
-                body: this.formData.body,
-                image: this.formData.image,
-                selectedCategories: this.fromData.selectedCategories
-            };
-            axios.defaults.headers.common["X-CSRF-TOKEN"] = this.csrfToken;
+            let formData = new FormData();
+            formData.append("title", this.formData.title);
+            formData.append("body", this.formData.body);
+            formData.append("image", this.formData.image);
+            formData.append("category_id", this.formData.category_id);
+
             axios
-                .post("/addCourse", Data)
+                .post("/add_course", formData)
                 .then((response) => {
-                    this.poruka = response.data.poruka;
+                    this.message = response.data.message;
+                    console.log(this.message);
+                    this.courseAdd = true;
                 })
                 .catch((error) => {
-                    if (error.response && error.response.status === 422) {
-                        this.errors = error.response.data.errors;
-                    } else {
-                        console.log(error);
-                    }
+                    console.log(error);
                 });
         },
     },
