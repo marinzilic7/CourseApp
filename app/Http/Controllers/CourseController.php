@@ -12,7 +12,7 @@ class CourseController extends Controller
     {
 
        $data = $request->validate([
-            'title' => 'required',
+            'naslov' => 'required',
             'body' => 'required',
             'image' => 'mimes:jpeg,jpg,png',
             'category_id' => 'required',
@@ -31,5 +31,13 @@ class CourseController extends Controller
         $course->save();
 
         return response()->json(['message' => 'Course added successfully'], 201);
+    }
+
+    public function getCourse(){
+
+        $course = Course::with('category')->get();
+
+
+        return response()->json($course);
     }
 }

@@ -95,7 +95,7 @@ import { RouterLink, RouterView } from "vue-router";
                                                 type="text"
                                                 class="form-control"
                                                 id="recipient-name"
-                                                v-model="formData.title"
+                                                v-model="formData.naslov"
                                             />
                                         </div>
                                         <div class="mb-3">
@@ -231,9 +231,9 @@ export default {
             isLoggedIn: false,
             loggedInUser: "",
             formData: {
-                title: "",
+                naslov: "",
                 body: "",
-                image: null,
+                image:'',
                 category_id: "",
             },
             csrfToken: "",
@@ -306,17 +306,18 @@ export default {
 
         addCourse() {
             let formData = new FormData();
-            formData.append("title", this.formData.title);
+            formData.append("naslov", this.formData.naslov);
             formData.append("body", this.formData.body);
             formData.append("image", this.formData.image);
             formData.append("category_id", this.formData.category_id);
 
             axios
-                .post("/add_course", formData)
+                .post("/addCourse", formData)
                 .then((response) => {
                     this.message = response.data.message;
                     console.log(this.message);
                     this.courseAdd = true;
+                    this.$router.push('/')
                 })
                 .catch((error) => {
                     console.log(error);

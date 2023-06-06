@@ -11,7 +11,8 @@ Route::post('/logUser',[UserController::class,'logUser']);
 Route::get('/isLogged',[UserController::class,'isLogged']);
 Route::post('/logout',[UserController::class,'logout']);
 Route::get('/categories',[CategoryController::class,'getCategory']);
-Route::post('/add_course',[CourseController::class,'addCourse']);
+Route::post('/addCourse',[CourseController::class,'addCourse']);
+Route::get('/getCourse',[CourseController::class,'getCourse']);
 
 Route::get('/{any}', function () {
     return view('welcome');
