@@ -52,4 +52,23 @@ class CourseController extends Controller
         }
     }
 
+    public function updateCourse(Request $request, $id){
+
+        $course = Course::findOrFail($id);
+
+        $data = $request->validate([
+            'naslov' => 'required|string',
+            'body' => 'required|string'
+        ]);
+
+        $course->naslov=$data['naslov'];
+        $course->body=$data['body'];
+        $course->save();
+
+        return response()->json([
+            'message' => 'Course updated successfully.',
+            'course' => $course,
+        ]);
+    }
+
 }

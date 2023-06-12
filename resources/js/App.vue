@@ -5,7 +5,7 @@ import { RouterLink, RouterView } from "vue-router";
 <template>
     <nav class="navbar navbar-expand-lg bg-primary">
         <div class="container-fluid">
-            <a class="navbar-brand text-light" href="/about">Books</a>
+            <a class="navbar-brand text-light" href="/about">Courses</a>
             <button
                 class="navbar-toggler"
                 type="button"
@@ -317,7 +317,7 @@ export default {
                     this.message = response.data.message;
                     console.log(this.message);
                     this.courseAdd = true;
-                    this.$router.push('/')
+
                 })
                 .catch((error) => {
                     console.log(error);
