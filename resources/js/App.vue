@@ -213,11 +213,7 @@ import { RouterLink, RouterView } from "vue-router";
             </div>
         </div>
     </nav>
-    <div v-if="search">
-        <div v-for="course in filteredCourses" :key="course.id">
-            <h1>{{ course.naslov }}</h1>
-        </div>
-    </div>
+
 
     <div>
         <p>Is Logged {{ isLogged }}</p>
@@ -234,7 +230,6 @@ import { RouterLink, RouterView } from "vue-router";
     <RouterView />
 </template>
 <script>
-import router from "./router";
 import axios from "axios";
 export default {
     data() {
@@ -253,7 +248,8 @@ export default {
             message: "",
             courseAdd: false,
             searchText: "",
-            search:false,
+            search: false,
+            hideCards: true,
         };
     },
     computed: {
@@ -346,12 +342,15 @@ export default {
                 });
         },
         searchCourse() {
+
             axios
                 .get("/search", { params: { searchText: this.searchText } })
                 .then((response) => {
-                    this.kurs = response.data.courses;
-                    this.search = true
-                    console.log(this.search)
+                    const results = response.data.results;
+                    this.search = true;
+                    console.log(results)
+                   /*  this.$router.push({ name: 'SearchResults', params: { results } }); */
+                   this.$router.push({ name: 'SearchResults', query: { results: JSON.stringify(results) } });
                 })
                 .catch((error) => {
                     console.log(error);

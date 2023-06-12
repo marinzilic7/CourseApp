@@ -1,9 +1,11 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+    <div>
+        <h2>Search Results</h2>
+
+    </div>
 </template>
 
-<script setup></script>
+<script>
+</script>
 
 <style lang="scss" scoped></style>

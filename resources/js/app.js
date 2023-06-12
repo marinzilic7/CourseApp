@@ -5,11 +5,13 @@ import { createStore } from 'vuex';
 import router from './router';
 import App from './App.vue';
 
+
 const store = createStore({
     state() {
         return {
             isLogged: localStorage.getItem('isLogged') === 'true',
-            porukaLog: localStorage.getItem('porukaLogiran') || ''
+            porukaLog: localStorage.getItem('porukaLogiran') || '',
+
         };
     },
     mutations: {
@@ -21,6 +23,8 @@ const store = createStore({
             state.porukaLog = value;
             localStorage.setItem('porukaLogiran', value); // Ispravljen ključ u lokalnom spremištu
         },
+
+
     },
     actions: {
         login({ commit }) {
@@ -40,6 +44,8 @@ const store = createStore({
                 commit('setPorukaLog', ''); // Resetiranje poruke nakon 5 sekundi
             }, 5000);
         },
+
+
     },
     getters: {
         getIsLogged(state) {
@@ -48,6 +54,7 @@ const store = createStore({
         getPorukaLog(state) {
             return state.porukaLog;
         },
+
     },
 });
 

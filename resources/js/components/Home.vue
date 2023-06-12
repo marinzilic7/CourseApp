@@ -28,7 +28,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h1
-                                    class="modal-title fs-5 "
+                                    class="modal-title fs-5"
                                     :id="'exampleModalLabell' + course.id"
                                 >
                                     Update course
@@ -120,8 +120,10 @@ export default {
             csrfToken: "",
             POST: "",
             currentCourseId: null,
+
         };
     },
+
     mounted() {
         this.getCourse();
     },
