@@ -194,12 +194,17 @@ import { RouterLink, RouterView } from "vue-router";
                     </div>
                 </ul>
 
-                <form class="d-flex" role="search">
+                <form
+                    class="d-flex"
+                    role="search"
+                    @submit.prevent="searchCourse"
+                >
                     <input
                         class="form-control me-2"
                         type="search"
                         placeholder="Search"
                         aria-label="Search"
+                        v-model="searchText"
                     />
                     <button class="btn btn-outline-light" type="submit">
                         Search
@@ -208,6 +213,12 @@ import { RouterLink, RouterView } from "vue-router";
             </div>
         </div>
     </nav>
+    <div v-if="search">
+        <div v-for="course in filteredCourses" :key="course.id">
+            <h1>{{ course.naslov }}</h1>
+        </div>
+    </div>
+
     <div>
         <p>Is Logged {{ isLogged }}</p>
 
@@ -233,7 +244,7 @@ export default {
             formData: {
                 naslov: "",
                 body: "",
-                image:'',
+                image: "",
                 category_id: "",
             },
             csrfToken: "",
@@ -241,6 +252,8 @@ export default {
             categories: [],
             message: "",
             courseAdd: false,
+            searchText: "",
+            search:false,
         };
     },
     computed: {
@@ -249,6 +262,16 @@ export default {
         },
         porukaLog() {
             return this.$store.getters.getPorukaLog;
+        },
+        filteredCourses() {
+            if (!this.kurs) {
+                return [];
+            }
+            return this.kurs.filter((course) => {
+                return course.naslov
+                    .toLowerCase()
+                    .includes(this.searchText.toLowerCase());
+            });
         },
     },
     mounted() {
@@ -317,7 +340,18 @@ export default {
                     this.message = response.data.message;
                     console.log(this.message);
                     this.courseAdd = true;
-
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
+        searchCourse() {
+            axios
+                .get("/search", { params: { searchText: this.searchText } })
+                .then((response) => {
+                    this.kurs = response.data.courses;
+                    this.search = true
+                    console.log(this.search)
                 })
                 .catch((error) => {
                     console.log(error);

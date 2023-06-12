@@ -71,4 +71,10 @@ class CourseController extends Controller
         ]);
     }
 
+    public function searchCourse(Request $request){
+        $searchText = $request->input('searchText');
+        $courses = Course::where('naslov', 'like', "%$searchText%")->get();
+        return response()->json(['courses' => $courses]);
+    }
+
 }

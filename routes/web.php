@@ -15,6 +15,7 @@ Route::post('/addCourse',[CourseController::class,'addCourse']);
 Route::get('/getCourse',[CourseController::class,'getCourse']);
 Route::post('/delete/{id}',[CourseController::class,'deleteCourse']);
 Route::post('/update/{id}',[CourseController::class,'updateCourse']);
+Route::get('/search',[CourseController::class,'searchCourse']);
 
 
 Route::get('/{any}', function () {
