@@ -4,8 +4,18 @@ Jednostavana aplikacija za kolegij "Projektiranje sustava e-učenja"
 
 ## Tehnologije 
 
-- <span style="color:red;">Laravel</span>
-- <font color="red">Ovaj tekst je crvene boje</font>
+- **Laravel**
+- **Vue**
+- **MySQL** 
+- **Bootstrap** 
+
+## Funkcionalnosti
+
+- Register i Login 
+    - Poruke o greškama
+- Dodavanje kursa
+- Update kursa
+- Brisanje kursa
 
 
 
