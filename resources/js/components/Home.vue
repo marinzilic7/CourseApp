@@ -1,5 +1,7 @@
 <template>
-    <p v-if="delete" class="text-center text-danger">{{ deleteMessage }}</p>
+    <p v-if="delete" id="deleteMessage" class="text-center text-danger">
+        {{ deleteMessage }}
+    </p>
     <div class="kartice">
         <div class="cards" v-for="course in courses" :key="course.id">
             <img :src="getImageUrl(course.image)" alt="" />
@@ -79,19 +81,11 @@
                                     <button
                                         type="submit"
                                         class="btn btn-primary"
+                                        id="updateButton"
                                     >
                                         Update
                                     </button>
                                 </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button
-                                    type="button"
-                                    class="btn btn-secondary"
-                                    data-bs-dismiss="modal"
-                                >
-                                    Close
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -120,7 +114,6 @@ export default {
             csrfToken: "",
             POST: "",
             currentCourseId: null,
-
         };
     },
 
@@ -162,6 +155,7 @@ export default {
                     );
                     this.deleteMessage = response.data.message;
                     this.delete = true;
+                    this.hideMessage();
                 })
                 .catch((error) => {
                     console.log(error);
@@ -194,6 +188,12 @@ export default {
                 .catch((error) => {
                     console.log(error);
                 });
+        },
+
+        hideMessage() {
+            setTimeout(() => {
+                this.delete = false;
+            }, 1000);
         },
     },
 };
@@ -238,5 +238,9 @@ img {
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+#updateButton {
+    width: 100%;
 }
 </style>

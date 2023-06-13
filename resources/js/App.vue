@@ -5,7 +5,7 @@ import { RouterLink, RouterView } from "vue-router";
 <template>
     <nav class="navbar navbar-expand-lg bg-primary">
         <div class="container-fluid">
-            <a class="navbar-brand text-light" href="/about">Courses</a>
+            <a class="navbar-brand text-light" href="/">Courses</a>
             <button
                 class="navbar-toggler"
                 type="button"
@@ -40,6 +40,7 @@ import { RouterLink, RouterView } from "vue-router";
                         >
                     </li>
                     <button
+                        v-if="isLogged"
                         type="button"
                         class="btn btn-primary"
                         data-bs-toggle="modal"
@@ -147,20 +148,13 @@ import { RouterLink, RouterView } from "vue-router";
                                         <button
                                             type="submit"
                                             class="btn btn-primary"
+                                            id="odbjegliButton"
                                         >
                                             Add
                                         </button>
                                     </form>
                                 </div>
-                                <div class="modal-footer">
-                                    <button
-                                        type="button"
-                                        class="btn btn-secondary"
-                                        data-bs-dismiss="modal"
-                                    >
-                                        Close
-                                    </button>
-                                </div>
+
                             </div>
                         </div>
                         <div
@@ -214,10 +208,7 @@ import { RouterLink, RouterView } from "vue-router";
         </div>
     </nav>
 
-
     <div>
-        <p>Is Logged {{ isLogged }}</p>
-
         <div
             v-if="isLogged && porukaLog"
             class="alert alert-success"
@@ -342,15 +333,17 @@ export default {
                 });
         },
         searchCourse() {
-
             axios
                 .get("/search", { params: { searchText: this.searchText } })
                 .then((response) => {
                     const results = response.data.results;
                     this.search = true;
-                    console.log(results)
-                   /*  this.$router.push({ name: 'SearchResults', params: { results } }); */
-                   this.$router.push({ name: 'SearchResults', query: { results: JSON.stringify(results) } });
+                    console.log(results);
+                    /*  this.$router.push({ name: 'SearchResults', params: { results } }); */
+                    this.$router.push({
+                        name: "SearchResults",
+                        query: { results: JSON.stringify(results) },
+                    });
                 })
                 .catch((error) => {
                     console.log(error);
@@ -365,5 +358,11 @@ export default {
     width: 10%;
     float: right;
     margin-right: 30px;
+}
+
+#odbjegliButton{
+    float: right;
+    width:100%;
+    margin-top:30px;
 }
 </style>

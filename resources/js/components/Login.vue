@@ -1,4 +1,3 @@
-
 <template>
     <div class="container">
         <form @submit.prevent="logUser" method="POST">
@@ -51,7 +50,7 @@
 </template>
 
 <script>
-import router from '../router'
+import router from "../router";
 import axios from "axios";
 export default {
     data() {
@@ -63,12 +62,11 @@ export default {
             errors: {},
             csrfToken: "",
             poruka: "",
-            falsePoruka:'',
+            falsePoruka: "",
             POST: "",
             successReg: false,
             showPassword: false,
-            falseReg:false,
-
+            falseReg: false,
         };
     },
     methods: {
@@ -83,7 +81,6 @@ export default {
                 });
         },
         logUser() {
-
             const Data = {
                 email: this.form.email,
                 password: this.form.password,
@@ -92,22 +89,24 @@ export default {
             axios
                 .post("/logUser", Data)
                 .then((response) => {
-                    const logiran = true
-                    this.$emit('variableChanged', logiran);
+                    const logiran = true;
+                    this.$emit("variableChanged", logiran);
                     this.poruka = response.data.poruka;
                     this.successReg = true;
-                    if(this.poruka == 'Uspješna prijava'){
-                        this.successReg = true
-                        this.falseReg = false
-                        this.$store.dispatch('login', true);
-                        this.$store.dispatch('setPoruka', 'Uspjesna prijava!');
+                    if (this.poruka == "Uspješna prijava") {
+                        this.successReg = true;
+                        this.falseReg = false;
+                        this.$store.dispatch("login", true);
+                        this.$store.dispatch("setPoruka", "Uspjesna prijava!");
                         /*  this.$router.push({ path: '/', query: { poruka: this.poruka } }); */
-                         this.$router.push('/')
-                    }else{
-                        this.falseReg = true
-                        this.successReg = false
-                    }
 
+                        this.$router.push({ path: "/" }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        this.falseReg = true;
+                        this.successReg = false;
+                    }
 
                     this.form = {
                         email: "",
@@ -117,16 +116,15 @@ export default {
                 })
                 .catch((error) => {
                     if (error.response && error.response.status === 422) {
-
                         this.errors = error.response.data.errors;
                     } else {
                         console.log(error);
                     }
                 });
         },
-        togglePasswordVisibility(){
-            this.showPassword = !this.showPassword
-        }
+        togglePasswordVisibility() {
+            this.showPassword = !this.showPassword;
+        },
     },
 };
 </script>
@@ -156,7 +154,6 @@ button {
 .notiDIV {
     margin-top: 25px;
 }
-
 
 .input-icon {
     float: right;
