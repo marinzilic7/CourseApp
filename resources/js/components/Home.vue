@@ -5,8 +5,11 @@
     <div class="kartice">
         <div class="cards" v-for="course in courses" :key="course.id">
             <img :src="getImageUrl(course.image)" alt="" />
-            <p>{{ course.naslov }}</p>
-            <p>{{ course.body }}</p>
+            <p id="naslov">{{ course.naslov }}</p>
+            <p id="bady">{{ course.body }}</p>
+            <p id="name_category">{{ course.category.name }}</p>
+            <p>{{ course.created_at }}</p>
+
             <div class="buttons">
                 <button
                     type="button"
@@ -101,6 +104,8 @@
 
 <script>
 import axios from "axios";
+import moment from "moment";
+
 export default {
     data() {
         return {
@@ -114,12 +119,14 @@ export default {
             csrfToken: "",
             POST: "",
             currentCourseId: null,
+            date: "",
         };
     },
 
     mounted() {
         this.getCourse();
     },
+
     methods: {
         fetchCsrfToken() {
             axios
@@ -138,7 +145,16 @@ export default {
             axios
                 .get("/getCourse")
                 .then((response) => {
-                    this.courses = response.data;
+                    this.courses = response.data.map((course) => ({
+                        ...course,
+                        created_at: new Date(
+                            course.created_at
+                        ).toLocaleDateString("hr-HR", {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                        }),
+                    }));
                     console.log(response.data);
                 })
                 .catch((error) => {
@@ -204,12 +220,13 @@ export default {
 }
 
 .cards {
-    border: 1px solid black;
+    border: none;
+    border-radius: 20px;
     overflow-wrap: break-word;
     width: 20%;
     padding: 30px;
     text-align: justify;
-    background-color: #f5f5f5;
+    background-color: #fff;
     margin-left: 20px;
     margin-top: 30px;
     display: flex;
@@ -242,5 +259,14 @@ img {
 
 #updateButton {
     width: 100%;
+}
+
+#naslov {
+    font-size: 25px;
+    text-align: start;
+}
+
+#name_category {
+    color: green;
 }
 </style>

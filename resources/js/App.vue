@@ -154,7 +154,6 @@ import { RouterLink, RouterView } from "vue-router";
                                         </button>
                                     </form>
                                 </div>
-
                             </div>
                         </div>
                         <div
@@ -208,7 +207,7 @@ import { RouterLink, RouterView } from "vue-router";
         </div>
     </nav>
 
-    <div>
+    <div class="hidePoruka">
         <div
             v-if="isLogged && porukaLog"
             class="alert alert-success"
@@ -222,6 +221,7 @@ import { RouterLink, RouterView } from "vue-router";
 </template>
 <script>
 import axios from "axios";
+import { toDisplayString } from "vue";
 export default {
     data() {
         return {
@@ -264,6 +264,13 @@ export default {
     mounted() {
         this.checkLoginStatus();
         this.getCategories();
+       /*  const showPoruka = this.$route.query.poruka === "true";
+        if (showPoruka) {
+            let text = document.querySelector(".hidePoruka");
+            setTimeout(() => {
+                text.style.display = "none"; // Sakrijemo poruku nakon određenog vremena
+            }, 1000);
+        } */
     },
     methods: {
         fetchCsrfToken() {
@@ -354,15 +361,17 @@ export default {
 </script>
 
 <style>
-.alert.alert-success {
-    width: 10%;
+#odbjegliButton {
     float: right;
-    margin-right: 30px;
+    width: 100%;
+    margin-top: 30px;
 }
 
-#odbjegliButton{
-    float: right;
-    width:100%;
-    margin-top:30px;
+.hidePoruka {
+    position: absolute;
+    width: 10%;
+    right: 0;
+    margin-right: 30px;
+    margin-top: 30px;
 }
 </style>

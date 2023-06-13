@@ -100,9 +100,21 @@ export default {
                         this.$store.dispatch("setPoruka", "Uspjesna prijava!");
                         /*  this.$router.push({ path: '/', query: { poruka: this.poruka } }); */
 
-                        this.$router.push({ path: "/" }).then(() => {
+                        /*  this.$router.push({ path: "/", query:{poruka:'true'} }).then(() => {
                             window.location.reload();
-                        });
+                        }); */
+
+                        this.$router
+                            .push({ path: "/", query: { poruka: "true" } })
+                            .then(() => {
+                                setTimeout(() => {
+                                    let text =
+                                        document.querySelector(".hidePoruka");
+                                    if (text) {
+                                        text.style.display = "none"; // Sakrijemo poruku nakon određenog vremena
+                                    }
+                                }, 1000);
+                            });
                     } else {
                         this.falseReg = true;
                         this.successReg = false;
