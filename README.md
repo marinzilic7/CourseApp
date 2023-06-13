@@ -4,7 +4,7 @@ Jednostavana aplikacija za kolegij "Projektiranje sustava e-učenja"
 
 ## Tehnologije 
 
-- <h3 style="color:blue">Laravel</h3>
+- <h5 style="color: blue;">Laravel</h5>
 
 
 
