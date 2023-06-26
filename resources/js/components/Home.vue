@@ -13,7 +13,7 @@
             <div class="buttons">
                 <button
                     type="button"
-                    class="btn btn-warning"
+                    class="btn btn-warning btn-sm"
                     data-bs-toggle="modal"
                     :data-bs-target="'#exampleModall' + course.id"
                     data-bs-whatever="@getbootstrap"
@@ -93,7 +93,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="btn btn-danger" @click="izbrisiKurs(course.id)">
+                <button class="btn btn-danger btn-sm" @click="izbrisiKurs(course.id)">
                     DELETE
                 </button>
             </div>
@@ -179,15 +179,16 @@ export default {
         },
         openUpdateModal(course) {
             this.currentCourseId = course.id; // Postavljamo trenutni ID kursa koji se ažurira
-            this.form.naslov = course.naslov; // Postavljamo vrednost forme na trenutni naslov kursa
-            this.form.body = course.body; // Postavljamo vrednost forme na trenuti opis kursa
+            this.form.naslov = course.naslov; // Postavljamo vrijednost forme na trenutni naslov kursa
+            this.form.body = course.body; // Postavljamo vrijednost forme na trenuti opis kursa
             $("#exampleModall" + course.id).modal("show"); // Prikazujemo modal za ažuriranje kursa
         },
         updateCourse(id) {
             axios.defaults.headers.common["X-CSRF-TOKEN"] = this.csrfToken;
             console.log(id);
+
             axios
-                .post(`/update/${id} `, {
+                .post(`/update/${id}`, {
                     naslov: this.form.naslov,
                     body: this.form.body,
                 })
@@ -197,9 +198,11 @@ export default {
                         (course) => course.id === this.currentCourseId
                     );
                     if (index !== -1) {
-                        this.courses.splice(index, 1, updatedCourse);
+                        /* this.courses.splice(index, 1, updatedCourse); */
+                        this.courses[index].naslov = updatedCourse.naslov;
+                        this.courses[index].body = updatedCourse.body;
                     }
-                    $("#exampleModall" + this.currentCourseId).modal("hide"); // Sakrijemo modal za ažuriranje kursa
+                    $("#exampleModall" + this.currentCourseId).modal("hide");
                 })
                 .catch((error) => {
                     console.log(error);
